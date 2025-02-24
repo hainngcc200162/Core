@@ -12,8 +12,8 @@ using bloghub.Context;
 namespace bloghub.Migrations
 {
     [DbContext(typeof(BlogDbContext))]
-    [Migration("20230616180748_initial")]
-    partial class initial
+    [Migration("20250218044507_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

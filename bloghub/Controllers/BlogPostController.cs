@@ -53,19 +53,8 @@ namespace bloghub.Controllers
         [HttpPost]
         public async Task<IActionResult> AddBlog([FromBody] BlogPost blogPost)
         {
-            try
-            {
-                bool isSaved= await _blogPostRepository.AddBlog(blogPost);
-                if (isSaved)
-                {
-                    return Ok("Blog has been saved.");
-                }
-                return BadRequest("Blog saved failed.");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            // Gọi phương thức trong service để xử lý logic
+            return await _blogPostRepository.AddBlog(blogPost);
         }
 
 

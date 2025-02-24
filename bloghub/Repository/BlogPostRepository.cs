@@ -1,5 +1,6 @@
 ﻿using bloghub.Context;
 using bloghub.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace bloghub.Repository
@@ -12,11 +13,24 @@ namespace bloghub.Repository
             _dbContext = doContext;
         }
 
-        public async Task<bool> AddBlog(BlogPost blogPost)
+        public async Task<IActionResult> AddBlog(BlogPost blogPost)
         {
-            FormattableString query = $"INSERT INTO BlogPosts (Title,Content,PublishedOn) VALUES({blogPost.Title},{blogPost.Content},{blogPost.PublishedOn})";
-            int rowAffected = await _dbContext.Database.ExecuteSqlAsync(query);
-            return rowAffected > 0;
+            try
+            {
+                FormattableString query = $"INSERT INTO BlogPosts (Title, Content, PublishedOn) VALUES({blogPost.Title}, {blogPost.Content}, {blogPost.PublishedOn})";
+                int rowAffected = await _dbContext.Database.ExecuteSqlAsync(query);
+
+                if (rowAffected > 0)
+                {
+                    return new OkObjectResult(new { message = "Blog has been saved.", success = true });
+                }
+
+                return new BadRequestObjectResult(new { message = "Blog save failed.", success = false });
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(new { message = ex.Message, success = false });
+            }
         }
 
         public async Task<bool> DeleteBlog(int id)
